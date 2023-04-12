@@ -29,4 +29,7 @@ extern int ObtieneElemento();
 extern bool esVacia();
 extern bool esLlena();
 extern void InsertaInicio(int d);
+extern void InsertarFinal(int d);
+extern int Eliminar();
+extern void muestraColaDoble();
 
