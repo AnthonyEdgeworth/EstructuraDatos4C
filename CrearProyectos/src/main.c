@@ -113,63 +113,51 @@ int main(void)
         fgets(nombre, sizeof(nombre), stdin);
         nombre[strcspn(nombre, "\n")] = 0;
 
-        if (mkdir(nombre, 0777) != 0)
-        {
-            printf("Error al crear el directorio.\n");
-            return 1;
-        }
+                   if (mkdir(nombre, 0777) != 0)
+            {
+                printf("Error al crear el directorio.\n");
+                return 1;
+            }
 
-        printf("El directorio '%s' se ha creado exitosamente.\n", nombre);
+            printf("El directorio '%s' se ha creado exitosamente.\n", nombre);
 
-        if (chdir(nombre) != 0)
-        {
-            printf("Error al cambiar al directorio '%s'.\n", nombre);
-            return 1;
-        }
-        printf("Cambiado al directorio '%s'.\n", nombre);
+            if (chdir(nombre) != 0)
+            {
+                printf("Error al cambiar al directorio '%s'.\n", nombre);
+                return 1;
+            }
 
-        directorio();
+            printf("Cambiado al directorio '%s'.\n", nombre);
 
-        FILE *makefile = fopen("Makefile", "w");
-        if (makefile == NULL)
-        {
-            printf("Error al abrir el archivo Makefile.\n");
-            return 1;
-        }
+            directorio();
+            crearMakeFile();
 
-        fprintf(makefile, "CC=gcc\nCFLAGS=-I.\n\n");
+            if (chdir("src") != 0)
+            {
+                printf("Error al cambiar al directorio");
+                return 1;
+            }
 
-        fprintf(makefile, "all: codigo\n\n");
+            printf("Cambiado al directorio src");
 
-        fprintf(makefile, "codigo: codigo.c\n\t$(CC) -o codigo codigo.c\n\n");
+            FILE *principal = fopen("main.c", "w");
+            if (principal == NULL)
+            {
+                printf("Error al abrir el archivo principal.\n");
+                return 1;
+            }
+            fclose(principal);
 
-        fprintf(makefile, "clean:\n\t-rm -rf $(TARGET) $(OBJS)\n\n");
-
-        fclose(makefile);
-
-        if (chdir("src") != 0)
-        {
-            printf("Error al cambiar al directorio");
-            return 1;
-        }
-
-        FILE *codigo = fopen("codigo.c", "w");
-        if (codigo == NULL)
-        {
-            printf("Error al abrir el archivo de código.\n");
-            return 1;
-        }
-        fclose(codigo);
-        printf("\n");
-        printf("--------------------------------------\n");
-        chdir("..");
-        system("ls");
-        printf("--------------------------------------\n");
-        chdir("..");
-        system("ls");
-        printf("--------------------------------------\n");
-        printf("\nPresione enter para cerrar el programa...");
-        getchar();
+            printf("\n");
+            printf("--------------------------------------\n");
+            chdir("..");
+            system("ls");
+            printf("--------------------------------------\n");
+            chdir("..");
+            system("ls");
+            printf("--------------------------------------\n");
+            printf("\nPresione enter para cerrar el programa...");
+            getchar();
 
         break;
 
