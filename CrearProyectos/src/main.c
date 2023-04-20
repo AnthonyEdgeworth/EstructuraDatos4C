@@ -6,40 +6,129 @@
 
 void directorio(void);
 void crearMakeFile(void);
+int cambiar_directorio_materia();
+int cambiar_directorio_laboratorio();
+void cambiar_directorio();
+void eliminarArchivo();
+char *obtener_directorio_actual();
+
+short int eliminar = 0;
+char *directorio_actual;
 
 int main(void)
 {
-    short int option = 0;
-    char nombre[100];
+    obtener_directorio_actual();
 
     do
     {
+
+        short int option = 0;
+        char nombre[100];
+        char direccion[100];
+
         system("clear");
-        printf("Bienvenido, ¿Qué es lo que vas a hacer?\n");
-        printf("[ 1 ] Materia\n");
-        printf("[ 2 ] Laboratorio\n");
-        printf(":_ ");
-        fflush(stdin);
-        scanf("%hd", &option);
+        cambiar_directorio();
 
-        if (option != 1 && option != 2)
-            printf("No es una opción valida.\n");
+        printf("\nCambiado al directorio %s\n", direccion);
+        getchar();
+        eliminar = 1;
 
-    } while (option != 1 && option != 2);
-
-    switch (option)
-    {
-    case 1:
-
-        if (chdir("/home/antho/Documentos/LenguajeC/EstructuraDatos4C/Materia/") != 0)
+        do
         {
-            printf("Error al cambiar al directorio");
-            return 1;
-        }
+            system("clear");
+            printf("Bienvenido, ¿Qué es lo que vas a hacer?\n");
+            printf("[ 1 ] Materia\n");
+            printf("[ 2 ] Laboratorio\n");
+            printf("[ 3 ] Cambiar direcctorio\n");
+            printf(":_ ");
+            fflush(stdin);
+            scanf("%hd", &option);
 
-        printf("\nCambiado al directorio /home/antho/Documentos/LenguajeC/EstructuraDatos4C/Materia/\n");
+            if (option != 1 && option != 2 && option != 3)
+                printf("No es una opción valida.\n");
 
+        } while (option != 1 && option != 2 && option != 3);
+
+        switch (option)
         {
+        case 1:
+
+            if (cambiar_directorio_materia() != 0)
+            {
+                printf("Ha ocurrido un error al cambiar al directorio Materia\n");
+                return 1;
+            }
+
+            {
+                printf("\n¿Cuál será el nombre del proyecto?:_");
+                fflush(stdin);
+                while ((getchar()) != '\n')
+                    ; // limpia el buffer de entrada
+                fgets(nombre, sizeof(nombre), stdin);
+                nombre[strcspn(nombre, "\n")] = 0;
+
+                if (mkdir(nombre, 0777) != 0)
+                {
+                    printf("Error al crear el directorio.\n");
+                    return 1;
+                }
+
+                printf("El directorio '%s' se ha creado exitosamente.\n", nombre);
+
+                if (chdir(nombre) != 0)
+                {
+                    printf("Error al cambiar al directorio '%s'.\n", nombre);
+                    return 1;
+                }
+
+                printf("Cambiado al directorio '%s'.\n", nombre);
+
+                directorio();
+                crearMakeFile();
+
+                if (chdir("src") != 0)
+                {
+                    printf("Error al cambiar al directorio");
+                    return 1;
+                }
+
+                printf("Cambiado al directorio src");
+
+                FILE *principal = fopen("main.c", "w");
+                if (principal == NULL)
+                {
+                    printf("Error al abrir el archivo principal.\n");
+                    return 1;
+                }
+                fclose(principal);
+
+                printf("\n");
+                printf("--------------------------------------\n");
+                chdir("..");
+                system("ls");
+                printf("--------------------------------------\n");
+                chdir("..");
+                system("ls");
+                printf("--------------------------------------\n");
+                printf("\nPresione enter para cerrar el programa...");
+                getchar();
+                if (chdir(directorio_actual) != 0)
+                {
+                    printf("Error al cambiar al directorio\n");
+                    return 1;
+                }
+                printf("Cambiado al directorio %s\n", directorio_actual);
+                break;
+            }
+
+        case 2:
+
+            if (cambiar_directorio_laboratorio() != 0)
+            {
+                printf("Ha ocurrido un error al cambiar al directorio Materia\n");
+                return 1;
+            }
+
             printf("\n¿Cuál será el nombre del proyecto?:_");
             fflush(stdin);
             while ((getchar()) != '\n')
@@ -92,83 +181,31 @@ int main(void)
             printf("--------------------------------------\n");
             printf("\nPresione enter para cerrar el programa...");
             getchar();
+            if (chdir(directorio_actual) != 0)
+            {
+                printf("Error al cambiar al directorio\n");
+                return 1;
+            }
+            printf("Cambiado al directorio %s\n", directorio_actual);
+
             break;
+
+        case 3:
+
+            eliminarArchivo("directorio.txt");
+            eliminar = 0;
+
+            break;
+
+        default:
+
+            printf("No se ha seleccionado una opción valida");
+            break;
+
+            return 0;
         }
 
-    case 2:
-    {
-
-        if (chdir("/home/antho/Documentos/LenguajeC/EstructuraDatos4C/Laboratorio/") != 0)
-        {
-            printf("Error al cambiar al directorio");
-            return 1;
-        }
-
-        printf("\nCambiado al directorio /home/antho/Documentos/LenguajeC/EstructuraDatos4C/Laboratorio/\n");
-
-        printf("\n¿Cuál será el nombre del proyecto?:_");
-        fflush(stdin);
-        while ((getchar()) != '\n')
-            ; // limpia el buffer de entrada
-        fgets(nombre, sizeof(nombre), stdin);
-        nombre[strcspn(nombre, "\n")] = 0;
-
-                   if (mkdir(nombre, 0777) != 0)
-            {
-                printf("Error al crear el directorio.\n");
-                return 1;
-            }
-
-            printf("El directorio '%s' se ha creado exitosamente.\n", nombre);
-
-            if (chdir(nombre) != 0)
-            {
-                printf("Error al cambiar al directorio '%s'.\n", nombre);
-                return 1;
-            }
-
-            printf("Cambiado al directorio '%s'.\n", nombre);
-
-            directorio();
-            crearMakeFile();
-
-            if (chdir("src") != 0)
-            {
-                printf("Error al cambiar al directorio");
-                return 1;
-            }
-
-            printf("Cambiado al directorio src");
-
-            FILE *principal = fopen("main.c", "w");
-            if (principal == NULL)
-            {
-                printf("Error al abrir el archivo principal.\n");
-                return 1;
-            }
-            fclose(principal);
-
-            printf("\n");
-            printf("--------------------------------------\n");
-            chdir("..");
-            system("ls");
-            printf("--------------------------------------\n");
-            chdir("..");
-            system("ls");
-            printf("--------------------------------------\n");
-            printf("\nPresione enter para cerrar el programa...");
-            getchar();
-
-        break;
-
-    default:
-
-        printf("No se ha seleccionado una opción valida");
-        break;
-    }
-
-        return 0;
-    }
+    } while (eliminar != 1);
 }
 void directorio(void)
 {
@@ -291,4 +328,209 @@ void crearMakeFile()
     fputs("\t@echo Executing 'run: all' complete!\n", archivo);
 
     fclose(archivo);
+}
+
+int cambiar_directorio_materia()
+{
+    char *directorio = "Materia ";
+    struct stat st = {0};
+
+    // Verificar si la carpeta ya existe
+    if (stat(directorio, &st) == 0)
+    {
+        printf("Se ha encontrado la carpeta %s\n", directorio);
+        printf("Entrando al directorio...\n");
+    }
+    else
+    {
+        printf("No se ha encontrado la carpeta %s\n", directorio);
+        printf("Desea crear la carpeta %s? (y/n): ", directorio);
+        char respuesta;
+        scanf(" %c", &respuesta);
+
+        if (respuesta == 'y' || respuesta == 'Y')
+        {
+            // Crear la carpeta
+            if (mkdir(directorio, 0777) != 0)
+            {
+                printf("Error al crear la carpeta\n");
+                return 1;
+            }
+            printf("La carpeta %s ha sido creada exitosamente\n", directorio);
+        }
+        else
+        {
+            // Salir de la función
+            printf("Saliendo de la función...\n");
+            return 0;
+        }
+    }
+
+    // Cambiar al directorio
+    if (chdir(directorio) != 0)
+    {
+        printf("Error al cambiar al directorio\n");
+        return 1;
+    }
+    printf("Cambiado al directorio %s\n", directorio);
+
+    return 0;
+}
+
+int cambiar_directorio_laboratorio()
+{
+    char *directorio = "Laboratorio ";
+    struct stat st = {0};
+
+    // Verificar si la carpeta ya existe
+    if (stat(directorio, &st) == 0)
+    {
+        printf("Se ha encontrado la carpeta %s\n", directorio);
+        printf("Entrando al directorio...\n");
+    }
+    else
+    {
+        printf("No se ha encontrado la carpeta %s\n", directorio);
+        printf("Desea crear la carpeta %s? (y/n): ", directorio);
+        char respuesta;
+        scanf(" %c", &respuesta);
+
+        if (respuesta == 'y' || respuesta == 'Y')
+        {
+            // Crear la carpeta
+            if (mkdir(directorio, 0777) != 0)
+            {
+                printf("Error al crear la carpeta\n");
+                return 1;
+            }
+            printf("La carpeta %s ha sido creada exitosamente\n", directorio);
+        }
+        else
+        {
+            // Salir de la función
+            printf("Saliendo de la función...\n");
+            return 0;
+        }
+    }
+
+    // Cambiar al directorio
+    if (chdir(directorio) != 0)
+    {
+        printf("Error al cambiar al directorio\n");
+        cambiar_directorio();
+        return 1;
+    }
+    printf("Cambiado al directorio %s\n", directorio);
+
+    return 0;
+}
+
+void cambiar_directorio()
+{
+    printf("presiona (enter) para continuar");
+    getchar();
+    char direccion[100];
+    FILE *archivo = fopen("directorio.txt", "r");
+    if (archivo == NULL)
+    { // El archivo no existe, se pide al usuario la dirección
+        printf("\n¿En qué directorio vas a trabajar?: ");
+        fgets(direccion, sizeof(direccion), stdin);
+        direccion[strcspn(direccion, "\n")] = 0;
+
+        archivo = fopen("directorio.txt", "w"); // Se crea el archivo
+
+        if (archivo == NULL)
+        { // Error al crear el archivo
+            printf("Error al crear el archivo directorio.txt\n");
+            exit(1);
+        }
+
+        if (chdir(direccion) != 0)
+        { // Se cambia al directorio
+            printf("Error al cambiar al directorio\n");
+            exit(1);
+        }
+        printf("\nCambiado al directorio %s\n", direccion);
+        fprintf(archivo, "%s", direccion); // Se guarda la dirección en el archivo
+        fclose(archivo);
+    }
+    else
+    { // El archivo existe, se lee la dirección
+        fgets(direccion, sizeof(direccion), archivo);
+        direccion[strcspn(direccion, "\n")] = 0;
+        fclose(archivo);
+
+        if (access("directorio.txt", F_OK) == 0)
+        { // El archivo existe, se lee la dirección
+            archivo = fopen("directorio.txt", "r");
+            if (archivo == NULL)
+            {
+                printf("Error al abrir el archivo directorio.txt\n");
+                exit(1);
+            }
+            fgets(direccion, sizeof(direccion), archivo);
+            direccion[strcspn(direccion, "\n")] = 0;
+            fclose(archivo);
+        }
+        else
+        { // El archivo no existe, se pide al usuario la dirección
+            printf("\n¿En qué directorio vas a trabajar?: ");
+            fflush(stdin);
+            fgets(direccion, sizeof(direccion), stdin);
+            direccion[strcspn(direccion, "\n")] = 0;
+
+            archivo = fopen("directorio.txt", "w"); // Se abre el archivo en modo escritura
+            if (archivo == NULL)
+            {
+                printf("Error al abrir el archivo directorio.txt\n");
+                exit(1);
+            }
+            fprintf(archivo, "%s", direccion); // Se guarda la dirección en el archivo
+            fclose(archivo);
+        }
+
+            if (chdir(direccion) != 0)
+            {
+                printf("Error al cambiar al directorio\n");
+
+            }
+            printf("Cambiado al directorio %s\n", direccion);
+    }
+}
+
+void eliminarArchivo()
+{
+    char confirmacion;
+    printf("¿Está seguro de que desea eliminar el archivo 'directorio.txt'? (s/n): ");
+    scanf(" %c", &confirmacion);
+    if (confirmacion == 's' || confirmacion == 'S')
+    {
+        FILE *archivo = fopen("directorio.txt", "r");
+        if (archivo == NULL)
+        {
+            printf("Error al abrir el archivo.\n");
+            exit(1);
+        }
+        fclose(archivo);
+        int resultado = remove("directorio.txt");
+        if (resultado == 0)
+        {
+            printf("El archivo se ha eliminado correctamente.\n");
+        }
+        else
+        {
+            printf("Error al eliminar el archivo.\n");
+        }
+    }
+    else
+    {
+        printf("El archivo no se ha eliminado.\n");
+    }
+}
+
+char *obtener_directorio_actual()
+{
+    directorio_actual = malloc(sizeof(char) * 1024); // reserva espacio para el nombre del directorio
+    getcwd(directorio_actual, 1024);                 // obtiene el directorio actual y lo guarda en la variable
+    return directorio_actual;                        // devuelve la variable
 }
