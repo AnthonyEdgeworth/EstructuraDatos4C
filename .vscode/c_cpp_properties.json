@@ -13,7 +13,8 @@
             "includePath": [
                 "${workspaceFolder}",
                 "/usr/include/gtk-3.0",
-                "${workspaceFolder}/Laboratorio/lista enlazada simple (Carga de Datos)/include"
+                "${workspaceFolder}/Laboratorio/lista enlazada simple (Carga de Datos)/include",
+                "${workspaceFolder}/Laboratorio/Lista Enlzada Simple (Carga de Info Libros)/include"
             ],
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c11",
