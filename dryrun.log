@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/antho/Documentos/Universidad/Enero -  Julio 2023/Estructura de Datos/EstructuraDatos4C'
+make: Leaving directory '/home/antho/Documentos/Universidad/Enero -  Julio 2023/Estructura de Datos/EstructuraDatos4C'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+

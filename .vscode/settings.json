@@ -1,5 +1,6 @@
 {
     "terminal.integrated.shellArgs.linux": [
         "--external-terminal"
-    ]
+    ],
+    "C_Cpp.errorSquiggles": "enabled"
 }

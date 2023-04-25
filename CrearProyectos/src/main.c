@@ -379,7 +379,7 @@ int cambiar_directorio_materia()
 
 int cambiar_directorio_laboratorio()
 {
-    char *directorio = "Laboratorio ";
+    char *directorio = "Laboratorio";
     struct stat st = {0};
 
     // Verificar si la carpeta ya existe

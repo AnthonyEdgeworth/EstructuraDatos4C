@@ -12,9 +12,8 @@
             "intelliSenseMode": "linux-gcc-x64",
             "includePath": [
                 "${workspaceFolder}",
-                "${workspaceFolder}/Materia/ColaDobleSalidaR/include",
                 "/usr/include/gtk-3.0",
-                "${workspaceFolder}/Laboratorio/Lab6/include"
+                "${workspaceFolder}/Laboratorio/lista enlazada simple (Carga de Datos)/include"
             ],
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c11",
@@ -25,7 +24,8 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
     "version": 4

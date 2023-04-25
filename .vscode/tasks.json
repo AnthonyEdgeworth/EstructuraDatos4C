@@ -1,17 +1,17 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "cppbuild",
-			"label": "gcc debug build all files - with GTK",
-			"command": "/usr/bin/gcc",
-			"args": [
-				"-fdiagnostics-color=always",
-				"-g",
-				"*.c",
-				"-o",
-				"${fileDirname}/${fileBasenameNoExtension}",
-				"-pthread",
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "gcc debug build all files - with GTK",
+            "command": "/usr/bin/gcc",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "*.c",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-pthread",
                 "-I/usr/include/gtk-3.0",
                 "-I/usr/include/at-spi2-atk/2.0",
                 "-I/usr/include/at-spi-2.0",
@@ -48,18 +48,58 @@
                 "-Wall",
                 "-O3",
                 "-I${fileDirname}/../include"
-			],
-			"options": {
-				"cwd": "${fileDirname}"
-			},
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build",
-			"detail": "compilador: /usr/bin/gcc"
-		}
-	]
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "compilador: /usr/bin/gcc"
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "env": {
+                    "PATH": "/usr/local/bin:${env:PATH}",
+                    "MY_OPTION": "my_option_value"
+                }
+            }
+        },
+        {
+            "label": "build & run",
+            "type": "shell",
+            "command": "make run",
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "env": {
+                    "PATH": "/usr/local/bin:${env:PATH}",
+                    "MY_OPTION": "my_option_value"
+                }
+            }
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "make clean",
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "env": {
+                    "PATH": "/usr/local/bin:${env:PATH}"
+                }
+            }
+        }
+    ]
 }
+
 
 /*{
     "version": "2.0.0",
