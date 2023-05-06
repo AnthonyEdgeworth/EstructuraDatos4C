@@ -47,7 +47,8 @@
                 "-lglib-2.0",
                 "-Wall",
                 "-O3",
-                "-I${fileDirname}/../include"
+                "-I${fileDirname}/../include"        
+
             ],
             "options": {
                 "cwd": "${fileDirname}"
